@@ -20,23 +20,61 @@ app.post("/json-upload", upload.single("file"), (req, res) => {
 
   const filePath = join(__dirname, "tmp", file.filename);
 
-  const data1 = require(filePath);
-  const data = data1.formContent;
+  const inputJSON = require(filePath);
 
-  //let newData: string[] = [];
+  const keys = Object.keys(inputJSON);
 
-  for (const prop in data) {
-    if (Array.isArray(data[prop])) {
-      console.log(`${prop} is an array!`);
-    } else if (typeof data[prop] === "object") {
-      console.log(`${prop} is an object!`);
-    } else {
-      console.log(`${prop} is a property!`);
+  const flattenAttributes: string[] = [];
+
+  keys.forEach((key) => {
+    const value = inputJSON[key];
+
+    let attrString = key;
+
+    if (isArray(value)) {
+      console.log(`${key} --> Array`);
+    } else if (isObject(value)) {
+      console.log(`${key} --> Object`);
+
+      attrString = attrString + "." + completeAttrString(value, attrString);
     }
+
+    flattenAttributes.push(attrString);
+  });
+
+  return res.status(200).json(flattenAttributes);
+});
+
+function isArray(attr: any): boolean {
+  return Array.isArray(attr);
+}
+
+function isObject(attr: any): boolean {
+  return typeof attr === "object";
+}
+
+function completeAttrString(obj: any, attrString: string): string {
+  const keys = Object.keys(obj);
+
+  if (keys) {
+    keys.forEach((key) => {
+      const value = obj[key];
+
+      if (isArray(value)) {
+        attrString = attrString + "." + key;
+        return attrString;
+      } else if (isObject(value)) {
+        attrString = attrString + "." + completeAttrString(value, attrString);
+        return attrString;
+      }
+
+      attrString = attrString + "." + key;
+      return attrString;
+    });
   }
 
-  return res.status(200).json(data);
-});
+  return "";
+}
 
 const port = 3000;
 app.listen(port, () => `Server running at port ${port}`);
