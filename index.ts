@@ -1,18 +1,41 @@
-import express from "express";
+import express, { Request } from "express";
 import multer from "multer";
+import { join } from "path";
 
 const app = express();
 
-const memory = multer.memoryStorage();
-const fileSizeLimit = 1 * 1024 * 1024; // 1 MB
-const upload = multer({ storage: memory, limits: { fileSize: fileSizeLimit } });
+app.use(express.json());
+
+const storage = multer.diskStorage({
+  destination: "./tmp",
+  filename: (req, file, cb) => {
+    cb(null, `data.json`);
+  },
+});
+
+const upload = multer({ storage });
 
 app.post("/json-upload", upload.single("file"), (req, res) => {
   const { file } = req;
 
-  console.log(file);
+  const filePath = join(__dirname, "tmp", file.filename);
 
-  return res.status(200).send();
+  const data1 = require(filePath);
+  const data = data1.formContent;
+
+  //let newData: string[] = [];
+
+  for (const prop in data) {
+    if (Array.isArray(data[prop])) {
+      console.log(`${prop} is an array!`);
+    } else if (typeof data[prop] === "object") {
+      console.log(`${prop} is an object!`);
+    } else {
+      console.log(`${prop} is a property!`);
+    }
+  }
+
+  return res.status(200).json(data);
 });
 
 const port = 3000;
