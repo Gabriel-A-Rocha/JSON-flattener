@@ -79,8 +79,6 @@ function handleObject(obj: any, attributesArray: string[]) {
       attributesArray.pop();
     }
   });
-
-  attributesArray.pop();
 }
 
 function detectValueType(value: any): string {
