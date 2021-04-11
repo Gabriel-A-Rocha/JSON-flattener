@@ -1,13 +1,14 @@
 import express from "express";
 import multer from "multer";
 import { join } from "path";
-import path from "path";
 
 const app = express();
 
 app.use(express.json());
 
 app.use(express.static("public"));
+
+app.set("view engine", "ejs");
 
 const storage = multer.diskStorage({
   destination: "./tmp",
@@ -28,7 +29,7 @@ enum TYPE {
 const flattenAttributes: string[] = [];
 
 app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "public", "views", "main.html"));
+  return res.render("main");
 });
 
 app.post("/json-upload", upload.single("file"), (req, res) => {
@@ -40,7 +41,7 @@ app.post("/json-upload", upload.single("file"), (req, res) => {
 
   handleObject(inputJSON);
 
-  return res.status(200).json(flattenAttributes);
+  return res.render("results");
 });
 
 function handleObject(obj: any, attributesArray: string[] = []) {
