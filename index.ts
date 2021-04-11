@@ -1,6 +1,7 @@
 import express from "express";
 import multer from "multer";
 import { join } from "path";
+import fs from "fs";
 
 const app = express();
 
@@ -45,6 +46,8 @@ app.post("/json-upload", upload.single("file"), (req, res) => {
     const response = [...flattenAttributes];
 
     flattenAttributes = [];
+
+    fs.unlinkSync(filePath);
 
     return res.render("results", { flattenAttributes: response });
   } catch (error) {
