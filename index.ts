@@ -26,22 +26,31 @@ enum TYPE {
   ARRAY = "Array",
 }
 
-const flattenAttributes: string[] = [];
+let flattenAttributes: string[] = [];
 
 app.get("/", (req, res) => {
   return res.render("main");
 });
 
 app.post("/json-upload", upload.single("file"), (req, res) => {
-  const { file } = req;
+  try {
+    const { file } = req;
 
-  const filePath = join(__dirname, "tmp", file.filename);
+    const filePath = join(__dirname, "tmp", file.filename);
 
-  const inputJSON = require(filePath);
+    const inputJSON = require(filePath);
 
-  handleObject(inputJSON);
+    handleObject(inputJSON);
 
-  return res.render("results", { flattenAttributes: flattenAttributes });
+    const response = [...flattenAttributes];
+
+    flattenAttributes = [];
+
+    return res.render("results", { flattenAttributes: response });
+  } catch (error) {
+    console.log(error);
+    res.render("error");
+  }
 });
 
 function handleObject(obj: any, attributesArray: string[] = []) {
