@@ -9,7 +9,9 @@
 <body>
     <h1>Results</h1>
 
-    <h2>Hello</h2>
+    <% flattenAttributes.forEach(line => { %>
+        <p><%= line %></p>
+    <% }) %>
     
 </body>
 </html>

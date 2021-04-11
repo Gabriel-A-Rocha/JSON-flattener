@@ -41,7 +41,7 @@ app.post("/json-upload", upload.single("file"), (req, res) => {
 
   handleObject(inputJSON);
 
-  return res.render("results");
+  return res.render("results", { flattenAttributes: flattenAttributes });
 });
 
 function handleObject(obj: any, attributesArray: string[] = []) {
