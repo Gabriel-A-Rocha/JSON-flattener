@@ -49,6 +49,8 @@ app.post("/json-upload", upload.single("file"), (req, res) => {
 
     fs.unlinkSync(filePath);
 
+    console.log("Operation successful.");
+
     return res.render("results", { flattenAttributes: response });
   } catch (error) {
     console.log(error);
