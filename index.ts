@@ -69,8 +69,9 @@ function handleObject(obj: any, attributesArray: string[] = []) {
     }
 
     if (valueType === TYPE.ARRAY) {
-      attributesArray.push(key + "[Array]");
-      flattenAttributes.push(attributesArray.join("."));
+      attributesArray.push(key);
+      // flattenAttributes.push(attributesArray.join("."));
+      handleObject(value, attributesArray);
       attributesArray.pop();
     }
 
