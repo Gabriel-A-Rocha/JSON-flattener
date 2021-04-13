@@ -30,7 +30,7 @@ enum TYPE {
 
 let flattenAttributes: string[] = [];
 
-const separators = [".", "..", "-", "--", "_", "__", "/", "|"];
+const separators = [".", "..", "...", "-", "--", "---", "_", "__", "___", "|", "/"];
 let separator = ".";
 
 app.get("/", (req, res) => {
