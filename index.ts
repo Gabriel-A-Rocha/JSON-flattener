@@ -6,6 +6,7 @@ import fs from "fs";
 const app = express();
 
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 app.use(express.static("public"));
 
@@ -29,13 +30,17 @@ enum TYPE {
 
 let flattenAttributes: string[] = [];
 
+const separators = [".", "..", "-", "--", "_", "__", "/", "|"];
+let separator = ".";
+
 app.get("/", (req, res) => {
-  return res.render("main");
+  return res.render("main", { separators: separators });
 });
 
 app.post("/json-upload", upload.single("file"), (req, res) => {
   try {
     const { file } = req;
+    separator = req.body.separator;
 
     const filePath = join(__dirname, "tmp", file.filename);
 
@@ -66,7 +71,7 @@ function handleObject(obj: any, attributesArray: string[] = []) {
 
     if (valueType === TYPE.PRIMITIVE) {
       attributesArray.push(key);
-      flattenAttributes.push(attributesArray.join("."));
+      flattenAttributes.push(attributesArray.join(separator));
       attributesArray.pop();
     }
 

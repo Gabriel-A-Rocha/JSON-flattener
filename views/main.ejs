@@ -6,6 +6,8 @@
         body{ padding: 20px; }
         form { margin: 20px 0;}
         .btn { display: block; margin: 20px 0;}
+        .separator-label {display: inline; color: grey;}
+        .separator-div {margin: 20px 0; width: 70px; }
     </style>
     
     <div class="container-fluid">
@@ -13,6 +15,18 @@
 
         <form action="/json-upload" method="post" enctype="multipart/form-data">
             <input type="file" name="file" />
+
+            <div class="separator-div">
+                <label class="separator-label" for="separator">Separator</label>
+                <select name="separator" class="form-select" aria-label="Default select example">
+                    <% separators.forEach(s => { %>
+                    <option selected value=<%= s %>><%= s %></option>
+                    <% }) %>
+                </select>
+            </div>
+            
+
+            
             <button class="btn btn-outline-primary" type="submit">Submit</button>
         </form>
     </div>
