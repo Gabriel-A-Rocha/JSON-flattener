@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "tsc": "tsc",
-    "build": "tsc && node index.js",
+    "build": "tsc",
     "start": "ts-node-dev index.ts",
     "start:dev": "ts-node-dev -- index.ts",
     "start:dev-debug": "ts-node-dev --inspect -- index.ts"
