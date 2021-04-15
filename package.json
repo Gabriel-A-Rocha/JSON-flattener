@@ -6,7 +6,7 @@
   "scripts": {
     "tsc": "tsc",
     "build": "tsc",
-    "start": "ts-node-dev index.ts",
+    "start": "node index.js",
     "start:dev": "ts-node-dev -- index.ts",
     "start:dev-debug": "ts-node-dev --inspect -- index.ts"
   },
