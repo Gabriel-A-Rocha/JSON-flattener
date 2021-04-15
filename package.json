@@ -5,8 +5,9 @@
   "main": "index.js",
   "scripts": {
     "tsc": "tsc",
-    "build": "node ./dist/index.js",
-    "start:dev": "ts-node-dev index.ts",
+    "build": "tsc && node index.js",
+    "start": "ts-node-dev index.ts",
+    "start:dev": "ts-node-dev -- index.ts",
     "start:dev-debug": "ts-node-dev --inspect -- index.ts"
   },
   "author": "Gabriel Rocha",

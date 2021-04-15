@@ -47,7 +47,6 @@ app.post("/json-upload", upload.single("file"), function (req, res) {
         var response = __spreadArray([], flattenAttributes);
         flattenAttributes = [];
         fs_1.default.unlinkSync(filePath);
-        console.log("Operation successful.");
         return res.render("results", { flattenAttributes: response });
     }
     catch (error) {
@@ -87,5 +86,5 @@ function detectValueType(value) {
     }
     return TYPE.PRIMITIVE;
 }
-var port = 3000;
+var port = process.env.PORT || 3000;
 app.listen(port, function () { return "Server running at port " + port; });

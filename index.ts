@@ -54,8 +54,6 @@ app.post("/json-upload", upload.single("file"), (req, res) => {
 
     fs.unlinkSync(filePath);
 
-    console.log("Operation successful.");
-
     return res.render("results", { flattenAttributes: response });
   } catch (error) {
     console.log(error);
@@ -99,5 +97,5 @@ function detectValueType(value: any): string {
   return TYPE.PRIMITIVE;
 }
 
-const port = 3000;
+const port = process.env.PORT || 3000;
 app.listen(port, () => `Server running at port ${port}`);
