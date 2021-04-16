@@ -30,8 +30,8 @@ enum TYPE {
 
 let flattenAttributes: string[] = [];
 
-const separators = [".", "..", "...", "-", "--", "---", "_", "__", "___", "|", "/"];
-let separator = ".";
+const separators = [".", "|", "/", "..", "...", "-", "--", "---", "_", "__", "___"];
+let separator = "___";
 
 app.get("/", (req, res) => {
   return res.render("main", { separators: separators });
@@ -46,7 +46,7 @@ app.post("/json-upload", upload.single("file"), (req, res) => {
 
     const inputJSON = require(filePath);
 
-    handleObject(inputJSON);
+    flattenObject(inputJSON);
 
     const response = [...flattenAttributes];
 
@@ -61,7 +61,7 @@ app.post("/json-upload", upload.single("file"), (req, res) => {
   }
 });
 
-function handleObject(obj: any, attributesArray: string[] = []) {
+function flattenObject(obj: any, attributesArray: string[] = []) {
   Object.keys(obj).forEach((key) => {
     const value = obj[key];
 
@@ -69,23 +69,32 @@ function handleObject(obj: any, attributesArray: string[] = []) {
 
     if (valueType === TYPE.PRIMITIVE) {
       attributesArray.push(key);
+
+      attributesArray.push(stringify(value));
       flattenAttributes.push(attributesArray.join(separator));
+      attributesArray.pop();
       attributesArray.pop();
     }
 
     if (valueType === TYPE.ARRAY) {
       attributesArray.push(key);
-      // flattenAttributes.push(attributesArray.join("."));
-      handleObject(value, attributesArray);
+      flattenObject(value, attributesArray);
       attributesArray.pop();
     }
 
     if (valueType === TYPE.OBJECT) {
       attributesArray.push(key);
-      handleObject(value, attributesArray);
+      flattenObject(value, attributesArray);
       attributesArray.pop();
     }
   });
+}
+
+function stringify(value: any): string {
+  if (value === null) {
+    return "null";
+  }
+  return value;
 }
 
 function detectValueType(value: any): string {
