@@ -23,7 +23,7 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage });
 
-app.get("/", (req, res) => {
+app.get("/json-upload", (req, res) => {
   const separators = [".", "|", "/", "..", "...", "-", "--", "---", "_", "__", "___"];
 
   return res.render("main", { separators: separators });
@@ -44,10 +44,8 @@ app.get("/results", (req, res) => {
   return res.download(filePath);
 });
 
-app.get("/textarea", (req, res) => {
+app.get("/", (req, res) => {
   const separators = [".", "|", "/", "..", "...", "-", "--", "---", "_", "__", "___"];
-
-  console.log(req.body);
 
   return res.render("JSONFlattenerTextarea", { separators: separators });
 });

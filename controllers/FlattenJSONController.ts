@@ -13,7 +13,6 @@ class FlattenJSONController {
       const jsonText = textarea;
 
       const flattenJSONTextareaService = new FlattenJSONTextareaService();
-
       const flattenAttributes = flattenJSONTextareaService.execute(jsonText, separator);
 
       return res.render("results", { flattenAttributes: flattenAttributes });
@@ -24,7 +23,6 @@ class FlattenJSONController {
     const filePath = join(__dirname, "..", "tmp", file.filename);
 
     const flattenJSONService = new FlattenJSONService();
-
     const flattenAttributes = flattenJSONService.execute(filePath, separator);
 
     return res.render("results", { flattenAttributes: flattenAttributes });
