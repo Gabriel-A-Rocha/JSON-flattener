@@ -44,5 +44,13 @@ app.get("/results", (req, res) => {
   return res.download(filePath);
 });
 
+app.get("/textarea", (req, res) => {
+  const separators = [".", "|", "/", "..", "...", "-", "--", "---", "_", "__", "___"];
+
+  console.log(req.body);
+
+  return res.render("JSONFlattenerTextarea", { separators: separators });
+});
+
 const port = process.env.PORT || 3000;
 app.listen(port, () => `Server running at port ${port}`);
