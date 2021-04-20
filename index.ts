@@ -1,7 +1,7 @@
 import express from "express";
 import multer from "multer";
+import { FlattenJSONController } from "./controllers/FlattenJSONController";
 import { join } from "path";
-import fs from "fs";
 
 const app = express();
 
@@ -9,6 +9,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use(express.static("public"));
+app.use(express.static("tmp"));
 
 app.set("view engine", "ejs");
 
@@ -22,89 +23,26 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage });
 
-enum TYPE {
-  PRIMITIVE = "Primitive",
-  OBJECT = "Object",
-  ARRAY = "Array",
-}
-
-let flattenAttributes: string[] = [];
-
-const separators = [".", "|", "/", "..", "...", "-", "--", "---", "_", "__", "___"];
-let separator = "___";
-
 app.get("/", (req, res) => {
+  const separators = [".", "|", "/", "..", "...", "-", "--", "---", "_", "__", "___"];
+
   return res.render("main", { separators: separators });
 });
 
 app.post("/json-upload", upload.single("file"), (req, res) => {
   try {
-    const { file } = req;
-    separator = req.body.separator;
+    const flattenJSONController = new FlattenJSONController();
 
-    const filePath = join(__dirname, "tmp", file.filename);
-
-    const inputJSON = require(filePath);
-
-    flattenObject(inputJSON);
-
-    const response = [...flattenAttributes];
-
-    flattenAttributes = [];
-
-    fs.unlinkSync(filePath);
-
-    return res.render("results", { flattenAttributes: response });
+    return flattenJSONController.handle(req, res);
   } catch (error) {
-    console.log(error);
-    res.render("error");
+    return res.render("error");
   }
 });
 
-function flattenObject(obj: any, attributesArray: string[] = []) {
-  Object.keys(obj).forEach((key) => {
-    const value = obj[key];
-
-    const valueType = detectValueType(value);
-
-    if (valueType === TYPE.PRIMITIVE) {
-      attributesArray.push(key);
-
-      attributesArray.push(stringify(value));
-      flattenAttributes.push(attributesArray.join(separator));
-      attributesArray.pop();
-      attributesArray.pop();
-    }
-
-    if (valueType === TYPE.ARRAY) {
-      attributesArray.push(key);
-      flattenObject(value, attributesArray);
-      attributesArray.pop();
-    }
-
-    if (valueType === TYPE.OBJECT) {
-      attributesArray.push(key);
-      flattenObject(value, attributesArray);
-      attributesArray.pop();
-    }
-  });
-}
-
-function stringify(value: any): string {
-  if (value === null) {
-    return "null";
-  }
-  return value;
-}
-
-function detectValueType(value: any): string {
-  if (Array.isArray(value)) {
-    return TYPE.ARRAY;
-  } else if (value && typeof value === "object") {
-    return TYPE.OBJECT;
-  }
-  return TYPE.PRIMITIVE;
-}
+app.get("/results", (req, res) => {
+  const filePath = join(__dirname, "tmp", "results.txt");
+  return res.download(filePath);
+});
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => `Server running at port ${port}`);
