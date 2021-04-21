@@ -13,8 +13,11 @@
     <div class="container-fluid">
         <h1>JSON Flattener</h1>
 
-        <form action="/json-upload" method="post" enctype="multipart/form-data">
-            <textarea name="textarea" cols="30" rows="10"></textarea>
+        <form action="/json-upload" method="post" enctype="multipart/form-data" class="">
+            
+            <label for="exampleFormControlTextarea1" class="form-label">Input JSON:</label>
+            <textarea name="textarea" class="form-control" id="exampleFormControlTextarea1" rows="10"></textarea>
+            
 
             <div class="separator-div">
                 <label class="separator-label" for="separator">Separator</label>
