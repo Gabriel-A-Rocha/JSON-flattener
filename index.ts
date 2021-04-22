@@ -23,10 +23,9 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage });
 
-app.post("/json-upload", upload.single("file"), (req, res) => {
+app.post("/", upload.single("file"), (req, res) => {
   try {
     const flattenJSONController = new FlattenJSONController();
-
     return flattenJSONController.handle(req, res);
   } catch (error) {
     return res.render("error");
@@ -39,8 +38,7 @@ app.get("/results", (req, res) => {
 });
 
 app.get("/", (req, res) => {
-  const separators = [".", ",", "|", "/", "..", "...", "-", "--", "---", "_", "__", "___"];
-
+  const separators = [".", "|", "/", "..", "...", "-", "--", "---", "_", "__", "___", ","];
   return res.render("JSONFlattener", { separators: separators });
 });
 

@@ -13,7 +13,7 @@ class FlattenJSONTextareaService {
 
   constructor() {
     this.flattenAttributes = [];
-    this.separator = ".";
+    this.separator = ",";
   }
 
   execute(textareaJSON: string, separator: string) {
@@ -53,7 +53,6 @@ class FlattenJSONTextareaService {
 
       if (valueType === TYPE.PRIMITIVE) {
         attributesArray.push(key);
-
         attributesArray.push(this.stringify(value));
         this.flattenAttributes.push(attributesArray.join(this.separator));
         attributesArray.pop();

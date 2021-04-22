@@ -13,7 +13,7 @@ class FlattenJSONService {
 
   constructor() {
     this.flattenAttributes = [];
-    this.separator = ".";
+    this.separator = ",";
   }
 
   execute(filePath: string, separator: string) {
@@ -55,8 +55,7 @@ class FlattenJSONService {
 
       if (valueType === TYPE.PRIMITIVE) {
         attributesArray.push(key);
-
-        attributesArray.push(this.stringify(value));
+        attributesArray.push(`"` + this.stringify(value) + `"`);
         this.flattenAttributes.push(attributesArray.join(this.separator));
         attributesArray.pop();
         attributesArray.pop();
