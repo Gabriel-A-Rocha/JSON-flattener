@@ -11,12 +11,6 @@ class FlattenJSONController {
 
     const flattenJSONService = new FlattenJSONService();
 
-    if (textarea) {
-      const importedJSON = JSON.parse(textarea);
-      const flattenAttributes = flattenJSONService.execute(importedJSON, separator);
-      return res.render("results", { flattenAttributes: flattenAttributes });
-    }
-
     const { file } = req;
 
     if (file) {
@@ -24,6 +18,12 @@ class FlattenJSONController {
       const importedJSON = require(filePath);
       const flattenAttributes = flattenJSONService.execute(importedJSON, separator);
       fs.unlinkSync(filePath);
+      return res.render("results", { flattenAttributes: flattenAttributes });
+    }
+
+    if (textarea) {
+      const importedJSON = JSON.parse(textarea);
+      const flattenAttributes = flattenJSONService.execute(importedJSON, separator);
       return res.render("results", { flattenAttributes: flattenAttributes });
     }
 
