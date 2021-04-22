@@ -8,13 +8,17 @@
         .btn { display: block; margin: 20px 0;}
         .separator-label {display: inline; color: grey;}
         .separator-div {margin: 20px 0; width: 70px; }
+        .choose-file {display: block; margin: 25px 0 20px;}
     </style>
     
     <div class="container-fluid">
         <h1>JSON Flattener</h1>
 
-        <form action="/json-upload" method="post" enctype="multipart/form-data">
-            <input type="file" name="file" />
+        <form action="/json-upload" method="post" enctype="multipart/form-data" class="">
+            <input type="file" name="file" class="choose-file" />
+
+            <label for="exampleFormControlTextarea1" class="form-label">Input JSON:</label>
+            <textarea name="textarea" class="form-control" id="exampleFormControlTextarea1" rows="10"></textarea>    
 
             <div class="separator-div">
                 <label class="separator-label" for="separator">Separator</label>
@@ -23,9 +27,7 @@
                     <option selected value=<%= s %>><%= s %></option>
                     <% }) %>
                 </select>
-            </div>
-            
-
+            </div>        
             
             <button class="btn btn-outline-primary" type="submit">Submit</button>
         </form>

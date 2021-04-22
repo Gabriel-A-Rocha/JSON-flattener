@@ -4,7 +4,6 @@
   "description": "JSON Flattener",
   "main": "index.js",
   "scripts": {
-    "tsc": "tsc",
     "build": "tsc",
     "start": "node index.js",
     "start:dev": "ts-node-dev -- index.ts",
