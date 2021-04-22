@@ -16,35 +16,18 @@ class FlattenJSONService {
     this.separator = ",";
   }
 
-  execute(filePath: string, separator: string) {
-    const importedJSON = require(filePath);
+  execute(importedJSON: any, separator: string) {
+    //const importedJSON = require(filePath);
     this.separator = separator;
 
     this.flattenObject(importedJSON);
 
     const response = [...this.flattenAttributes];
 
-    this.deleteImportedJSON(filePath);
-
     const resultsFilePath = join(__dirname, "..", "tmp", "results.txt");
     this.saveResultsTxtFile(response, resultsFilePath);
 
     return response;
-  }
-
-  saveResultsTxtFile(flattenAttrs: string[], filePath: string) {
-    let file = fs.createWriteStream(filePath);
-    file.on("error", function (err) {
-      /* error handling */
-    });
-    flattenAttrs.forEach(function (v) {
-      file.write(v + "\n");
-    });
-    file.end();
-  }
-
-  deleteImportedJSON(filePath: string) {
-    fs.unlinkSync(filePath);
   }
 
   flattenObject(obj: any, attributesArray: string[] = []) {
@@ -89,6 +72,17 @@ class FlattenJSONService {
       return TYPE.OBJECT;
     }
     return TYPE.PRIMITIVE;
+  }
+
+  saveResultsTxtFile(flattenAttrs: string[], filePath: string) {
+    let file = fs.createWriteStream(filePath);
+    file.on("error", function (err) {
+      /* error handling */
+    });
+    flattenAttrs.forEach(function (v) {
+      file.write(v + "\n");
+    });
+    file.end();
   }
 }
 
